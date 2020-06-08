@@ -18,7 +18,7 @@ static const FName NAME_ThrottleInput("Throttle");
 
 AVehiclePawn::AVehiclePawn()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	UWheeledVehicleMovementComponent4W* Vehicle4W = CastChecked<UWheeledVehicleMovementComponent4W>(GetVehicleMovement());
 
 	// Adjust tire loading

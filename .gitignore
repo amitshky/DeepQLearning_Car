@@ -73,8 +73,6 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-!Content/*
+
 pytorch saved files
 *.pt
-
-!SavedNets/final (for now) (do not delete)/5-15-3 (cpu)/*.pt

@@ -20,16 +20,17 @@ public class DQN_Car : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 
+		string libtorch_path = "C:/_My Files/Visual Studio/@ Libraries/Pytorch for cpp/release";
 		string libtorch_include = "libtorch/include";
 		string libtorch_torch_include = "libtorch/include/torch/csrc/api/include";
 		string libtorch_lib = "libtorch/lib";
 
-		PublicIncludePaths.Add(Path.Combine(projectRootPath, libtorch_include));
-		PublicIncludePaths.Add(Path.Combine(projectRootPath, libtorch_torch_include));
+		PublicIncludePaths.Add(Path.Combine(libtorch_path, libtorch_include));
+		PublicIncludePaths.Add(Path.Combine(libtorch_path, libtorch_torch_include));
 
-		PublicAdditionalLibraries.Add(Path.Combine(projectRootPath, libtorch_lib, "c10.lib"));
-		PublicAdditionalLibraries.Add(Path.Combine(projectRootPath, libtorch_lib, "torch.lib"));
-		PublicAdditionalLibraries.Add(Path.Combine(projectRootPath, libtorch_lib, "caffe2_module_test_dynamic.lib"));
+		PublicAdditionalLibraries.Add(Path.Combine(libtorch_path, libtorch_lib, "c10.lib"));
+		PublicAdditionalLibraries.Add(Path.Combine(libtorch_path, libtorch_lib, "torch.lib"));
+		PublicAdditionalLibraries.Add(Path.Combine(libtorch_path, libtorch_lib, "caffe2_module_test_dynamic.lib"));
 
 		string cuda_path = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1";
 		string cuda_include = "include";
