@@ -2,7 +2,6 @@
 Simulation based Self-Driving Car using Reinforcement Learning.\
 This project was built with cuda version 10.1 and Unreal Engine 4.23.1.
 
-
 ## Setup
 * In DQN_Car.Build.cs file change "libtorch_path" variable to the directory of your local libtorch folder. Keep in mind that this directory should contain a folder called libtorch, where the rest of the libtorch files should exist.
 * Also change "cuda_path" to the directory containing your local cuda v10.1 files
@@ -21,3 +20,17 @@ __pragma(warning(disable: 4018))\
 ## Run
 * Make sure to follow all the steps of the Setup
 * Then build and run (press F5 for visual studio)
+
+## ToDo
+### Unreal Environment Simulation
+- [x] Car Movement
+- [x] Track (Default; Training)
+- [ ] Minimap
+- [ ] Graphs
+- [ ] Other Tracks
+
+### DQN Implementation
+- [ ] Replay Memory
+- [ ] Neural network and training interface class
+- [ ] Epsilon Greedy Strategy and Agent
+- [ ] Algorithm Implementation
