@@ -15,7 +15,7 @@ __pragma(warning(disable: 4583))\
 __pragma(warning(disable: 4018))\
 ```
 * Open DQN_Car.sln file and check to see if the startup project is "DQN_Car" and not "UE4"
-* Change the "rootPath" variable in "Source/DQN_Car/DQN_Car_GI.cpp" to a path on your device (the path should be an absolute path).
+* Change the "rootPath" variable (in "Source/DQN_Car/DQN_Car_GI.cpp") to the absolute path of "SavedNets/" on your device.
 
 ## Run
 * Make sure to follow all the steps of the Setup
