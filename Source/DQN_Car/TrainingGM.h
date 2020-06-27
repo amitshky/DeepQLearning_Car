@@ -13,5 +13,11 @@ UCLASS()
 class DQN_CAR_API ATrainingGM : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	ATrainingGM();
+
+	void BeginPlay() override;
+	void Tick(float deltaTime) override;
 	
 };

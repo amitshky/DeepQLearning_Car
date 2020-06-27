@@ -105,12 +105,12 @@ void AVehiclePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//TraceDistance();	// get state and reward
+	TraceDistance();	// comment this 
 }
 
 void AVehiclePawn::TraceDistance()
 {
-	bool debugLine = false;
+	bool debugLine = true;
 	FHitResult outHitForward, outHitLeft, outHitRight, outHitLeftSide, outHitRightSide;
 	TraceByProfile(outHitForward, SensorForward->GetComponentLocation(), SensorForward->GetForwardVector(), debugLine, FColor::Green);
 	TraceByProfile(outHitLeft, SensorLeft->GetComponentLocation(), SensorLeft->GetForwardVector(), debugLine, FColor::Red);
