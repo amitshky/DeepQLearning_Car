@@ -79,3 +79,6 @@ pytorch saved files
 
 
 Source/DQN_Car/DQN_Car.Build.cs
+
+# Rider for unreal files
+.idea/
