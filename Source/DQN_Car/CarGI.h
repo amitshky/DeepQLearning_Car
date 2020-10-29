@@ -37,5 +37,5 @@ public:
 
 	//static std::unique_ptr<ReplayMemory> Mem;
 	//static std::unique_ptr<QAgent> Agent;
-	//static std::unique_ptr<NetworkInterface> Net;
+	static std::unique_ptr<NetworkInterface> Net;
 };
