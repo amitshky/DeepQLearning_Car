@@ -15,10 +15,10 @@ __pragma(warning(disable: 4583))\
 __pragma(warning(disable: 4018))\
 ```
 * Open DQN_Car.sln file and check to see if the startup project is "DQN_Car" and not "UE4"
-* Change the "rootPath" variable (in "Source/DQN_Car/DQN_Car_GI.cpp") to the absolute path of "SavedNets/" on your device.
 
 ## Run
 * Make sure to follow all the steps of the Setup
+* If you want to resume the training then set ```g_Resume = true``` in ```CarGI.cpp```
 * Then build and run (press F5 for visual studio)
 
 ## ToDo
@@ -31,6 +31,6 @@ __pragma(warning(disable: 4018))\
 
 ### DQN Implementation
 - [ ] Replay Memory
-- [ ] Neural network and training interface class
+- [x] Neural network and training interface class
 - [ ] Epsilon Greedy Strategy and Agent
 - [ ] Algorithm Implementation
