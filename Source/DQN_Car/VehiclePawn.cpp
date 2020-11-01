@@ -80,7 +80,7 @@ AVehiclePawn::AVehiclePawn()
 	SensorRightSide->SetupAttachment(RootComponent);
 
 
-	CurrentState = torch::zeros({ 1, UCarGI::NumStates }, Device);
+	CurrentState = torch::zeros({ UCarGI::NumStates }, Device);
 	CurrentReward = torch::zeros({ 1 }, Device);
 
 }
@@ -110,10 +110,10 @@ void AVehiclePawn::Tick(float DeltaTime)
 void AVehiclePawn::TraceDistance(bool debugLine)
 {
 	FHitResult outHitForward, outHitLeft, outHitRight, outHitLeftSide, outHitRightSide;
-	TraceByProfile(outHitForward,   SensorForward->GetComponentLocation(),   SensorForward->GetForwardVector(), debugLine, FColor::Green);
-	TraceByProfile(outHitLeft,      SensorLeft->GetComponentLocation(),      SensorLeft->GetForwardVector(), debugLine, FColor::Red);
-	TraceByProfile(outHitRight,     SensorRight->GetComponentLocation(),     SensorRight->GetForwardVector(), debugLine, FColor::Blue);
-	TraceByProfile(outHitLeftSide,  SensorLeftSide->GetComponentLocation(),  SensorLeftSide->GetForwardVector(), debugLine, FColor::Magenta);
+	TraceByProfile(outHitForward,   SensorForward->GetComponentLocation(),   SensorForward->GetForwardVector(),   debugLine, FColor::Green);
+	TraceByProfile(outHitLeft,      SensorLeft->GetComponentLocation(),      SensorLeft->GetForwardVector(),      debugLine, FColor::Red);
+	TraceByProfile(outHitRight,     SensorRight->GetComponentLocation(),     SensorRight->GetForwardVector(),     debugLine, FColor::Blue);
+	TraceByProfile(outHitLeftSide,  SensorLeftSide->GetComponentLocation(),  SensorLeftSide->GetForwardVector(),  debugLine, FColor::Magenta);
 	TraceByProfile(outHitRightSide, SensorRightSide->GetComponentLocation(), SensorRightSide->GetForwardVector(), debugLine, FColor::Cyan);
 
 	FString debugMsg = FString::Printf(TEXT(	// display sensor values on screen
@@ -143,37 +143,37 @@ void AVehiclePawn::TraceDistance(bool debugLine)
 		CurrentReward = torch::tensor(-200.0f);
 	}
 
-	else if (outHitLeftSide.Time < 0.2f || outHitLeft.Time < 0.2f || outHitForward.Time < 0.2f 
-			|| outHitRight.Time < 0.2f || outHitRightSide.Time < 0.2f)
-		CurrentReward = torch::tensor(-30.0f);
+	//else if (outHitLeftSide.Time < 0.2f || outHitLeft.Time < 0.2f || outHitForward.Time < 0.2f 
+	//		|| outHitRight.Time < 0.2f || outHitRightSide.Time < 0.2f)
+	//	CurrentReward = torch::tensor(-30.0f);
 
 	else
-		CurrentReward = torch::tensor(0.5f);
+		CurrentReward = torch::tensor(0.0f);
 
 	if (HitGate)
 	{
-		CurrentReward += torch::tensor(10.0f);
+		CurrentReward += torch::tensor(50.0f);
 		HitGate = false;
 	}
 }
 
 void AVehiclePawn::TakeAction(torch::Tensor& action)
 {
-	if (action[0].item<int>() == 0)
+	if (action.item<int>() == 0)
 	{
-		ApplyThrottle(1);
+		ApplyThrottle(0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Throttle %d"), action[0].item<int>());
 	}
-	else if (action[0].item<int>() == 1)
+	else if (action.item<int>() == 1)
 	{
-		ApplyThrottle(1);
-		ApplySteering(-1);
+		ApplyThrottle(0.8f);
+		ApplySteering(-0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Steer Left %d"), action[0].item<int>());
 	}
-	else if (action[0].item<int>() == 2)
+	else if (action.item<int>() == 2)
 	{
-		ApplyThrottle(1);
-		ApplySteering(1);
+		ApplyThrottle(0.8f);
+		ApplySteering(0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action[0].item<int>());
 	}
 
@@ -237,10 +237,10 @@ void AVehiclePawn::TraceByProfile(FHitResult& outHit, const FVector& start, cons
 	}*/
 }
 
-void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(NAME_ThrottleInput, this, &AVehiclePawn::ApplyThrottle);
-	PlayerInputComponent->BindAxis(NAME_SteerInput, this, &AVehiclePawn::ApplySteering);
-}
+//void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	PlayerInputComponent->BindAxis(NAME_ThrottleInput, this, &AVehiclePawn::ApplyThrottle);
+//	PlayerInputComponent->BindAxis(NAME_SteerInput, this, &AVehiclePawn::ApplySteering);
+//}

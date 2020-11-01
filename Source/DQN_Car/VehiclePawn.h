@@ -23,7 +23,7 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	void ApplyThrottle(float val);
 	void ApplySteering(float val);

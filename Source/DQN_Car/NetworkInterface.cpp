@@ -4,15 +4,9 @@
 #include "NetworkInterface.h"
 #include "Engine/Engine.h"
 
-const int32_t g_HiddenLayers = 15;
-
 NetworkInterface::NetworkInterface(int32 numStates, int32 numActions, float gamma, float learningRate, torch::Device device)
-	:m_PolicyNet(torch::nn::Linear(numStates, g_HiddenLayers),
-		torch::nn::ReLU(),
-		torch::nn::Linear(g_HiddenLayers, numActions)),
-	m_TargetNet(torch::nn::Linear(numStates, g_HiddenLayers),
-		torch::nn::ReLU(),
-		torch::nn::Linear(g_HiddenLayers, numActions)),
+	:m_PolicyNet(numStates, numActions),
+	m_TargetNet(numStates, numActions),
 	m_Optimizer(m_PolicyNet->parameters(), torch::optim::RMSpropOptions(learningRate)),
 	m_Gamma(gamma),
 	m_Device(device)

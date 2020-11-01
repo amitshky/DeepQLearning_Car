@@ -7,6 +7,7 @@ THIRD_PARTY_INCLUDES_START
 #include "torch/torch.h"
 THIRD_PARTY_INCLUDES_END
 //#include "ReplayMemory.h"
+#include "Dqnet.h"
 
 /**
  * 
@@ -32,16 +33,16 @@ public:
 	void SaveOptimizer(const std::string& path);
 	void LoadOptimizer(const std::string& path);
 
-	inline torch::nn::Sequential GetPolicyNet() const { return m_PolicyNet; }
-	inline torch::nn::Sequential GetTargetNet() const { return m_TargetNet; }
+	inline Dqnet GetPolicyNet() const { return m_PolicyNet; }
+	inline Dqnet GetTargetNet() const { return m_TargetNet; }
 
 private:
 	// do not call this function it does not work // when it works it will be made public
 	//void LoadStateDict();
 
 private:
-	torch::nn::Sequential m_PolicyNet;
-	torch::nn::Sequential m_TargetNet;
+	Dqnet m_PolicyNet;
+	Dqnet m_TargetNet;
 
 	torch::optim::RMSprop m_Optimizer;
 
