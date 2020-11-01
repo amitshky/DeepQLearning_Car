@@ -78,5 +78,12 @@ pytorch saved files
 *.pt
 
 
+<<<<<<< HEAD
 .idea/
 Source/DQN_Car/DQN_Car.Build.cs
+=======
+Source/DQN_Car/DQN_Car.Build.cs
+
+# Rider for unreal files
+.idea/
+>>>>>>> 36b41b6a37fc1d110a8d39b36abc8b32af631758
