@@ -78,4 +78,5 @@ pytorch saved files
 *.pt
 
 
+.idea/
 Source/DQN_Car/DQN_Car.Build.cs

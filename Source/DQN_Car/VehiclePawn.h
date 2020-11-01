@@ -23,13 +23,10 @@ public:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	void ApplyThrottle(float val);
 	void ApplySteering(float val);
-
-	void OnHandbrakePressed();
-	void OnHandbrakeReleased();
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -37,14 +34,14 @@ public:
 	UFUNCTION()
 		void OnOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	void TraceDistance(); // get state and reward
+	void TraceDistance(bool debugLine = true); // get state and reward
 	void TraceByProfile(FHitResult& outHit, const FVector& start, const FVector& forward, bool drawDebug = false, FColor debugColor = FColor::Green);
 
 	void TakeAction(torch::Tensor& action);
 
 	FORCEINLINE torch::Tensor GetState() const { return CurrentState; }
 	FORCEINLINE torch::Tensor GetReward() const { return CurrentReward; }
-	FORCEINLINE bool GetDone() const { return done; }
+	FORCEINLINE bool GetDone() const { return Done; }
 
 protected:
 
@@ -73,7 +70,7 @@ protected:
 private:
 	torch::Tensor CurrentState;
 	torch::Tensor CurrentReward;
-	bool done = false;
-	bool hitGate = false;
-	torch::Device device = torch::kCPU;
+	bool Done = false;
+	bool HitGate = false;
+	torch::Device Device = torch::kCPU;
 };

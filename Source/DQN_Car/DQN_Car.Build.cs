@@ -20,7 +20,7 @@ public class DQN_Car : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
 
-		string libtorch_path = "C:/_My Files/Visual Studio/@ Libraries/Pytorch for cpp/release";
+		string libtorch_path = "C:/_MyFiles/VisualStudio/@Libraries/PytorchForCpp/release";
 		string libtorch_include = "libtorch/include";
 		string libtorch_torch_include = "libtorch/include/torch/csrc/api/include";
 		string libtorch_lib = "libtorch/lib";

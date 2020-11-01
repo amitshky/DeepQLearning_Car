@@ -10,7 +10,7 @@
 #include "WheeledVehicleMovementComponent4W.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/Engine.h"
-#include "DQN_Car_GI.h"
+#include "CarGI.h"
 
 
 static const FName NAME_SteerInput("Steer");
@@ -80,8 +80,8 @@ AVehiclePawn::AVehiclePawn()
 	SensorRightSide->SetupAttachment(RootComponent);
 
 
-	CurrentState = torch::zeros({ 1, UDQN_Car_GI::numStates }, device);
-	CurrentReward = torch::zeros({ 1 }, device);
+	CurrentState = torch::zeros({ UCarGI::NumStates }, Device);
+	CurrentReward = torch::zeros({ 1 }, Device);
 
 }
 
@@ -105,17 +105,15 @@ void AVehiclePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	TraceDistance();	// comment this 
 }
 
-void AVehiclePawn::TraceDistance()
+void AVehiclePawn::TraceDistance(bool debugLine)
 {
-	bool debugLine = true;
 	FHitResult outHitForward, outHitLeft, outHitRight, outHitLeftSide, outHitRightSide;
-	TraceByProfile(outHitForward, SensorForward->GetComponentLocation(), SensorForward->GetForwardVector(), debugLine, FColor::Green);
-	TraceByProfile(outHitLeft, SensorLeft->GetComponentLocation(), SensorLeft->GetForwardVector(), debugLine, FColor::Red);
-	TraceByProfile(outHitRight, SensorRight->GetComponentLocation(), SensorRight->GetForwardVector(), debugLine, FColor::Blue);
-	TraceByProfile(outHitLeftSide, SensorLeftSide->GetComponentLocation(), SensorLeftSide->GetForwardVector(), debugLine, FColor::Magenta);
+	TraceByProfile(outHitForward,   SensorForward->GetComponentLocation(),   SensorForward->GetForwardVector(),   debugLine, FColor::Green);
+	TraceByProfile(outHitLeft,      SensorLeft->GetComponentLocation(),      SensorLeft->GetForwardVector(),      debugLine, FColor::Red);
+	TraceByProfile(outHitRight,     SensorRight->GetComponentLocation(),     SensorRight->GetForwardVector(),     debugLine, FColor::Blue);
+	TraceByProfile(outHitLeftSide,  SensorLeftSide->GetComponentLocation(),  SensorLeftSide->GetForwardVector(),  debugLine, FColor::Magenta);
 	TraceByProfile(outHitRightSide, SensorRightSide->GetComponentLocation(), SensorRightSide->GetForwardVector(), debugLine, FColor::Cyan);
 
 	FString debugMsg = FString::Printf(TEXT(	// display sensor values on screen
@@ -137,49 +135,50 @@ void AVehiclePawn::TraceDistance()
 		outHitForward.Time,
 		outHitRight.Time,
 		outHitRightSide.Time,
-	} }, device);
+	} }, Device);
 
 	// Get reward
-	if (done)
+	if (Done)
 	{
-		CurrentReward = torch::tensor(-10);
+		CurrentReward = torch::tensor(-200.0f);
 	}
 
-	else if (outHitLeftSide.Time < 0.2f || outHitLeft.Time < 0.2f || outHitForward.Time < 0.2f || outHitRight.Time < 0.2f || outHitRightSide.Time < 0.2f)
-		CurrentReward = torch::tensor(-5);
+	//else if (outHitLeftSide.Time < 0.2f || outHitLeft.Time < 0.2f || outHitForward.Time < 0.2f 
+	//		|| outHitRight.Time < 0.2f || outHitRightSide.Time < 0.2f)
+	//	CurrentReward = torch::tensor(-30.0f);
 
 	else
-		CurrentReward = torch::tensor(0.3);
+		CurrentReward = torch::tensor(0.0f);
 
-	if (hitGate)
+	if (HitGate)
 	{
-		CurrentReward += torch::tensor(8);
-		hitGate = false;
+		CurrentReward += torch::tensor(50.0f);
+		HitGate = false;
 	}
 }
 
 void AVehiclePawn::TakeAction(torch::Tensor& action)
 {
-	if (action[0].item<int>() == 0)
+	if (action.item<int>() == 0)
 	{
-		ApplyThrottle(1);
+		ApplyThrottle(0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Throttle %d"), action[0].item<int>());
 	}
-	else if (action[0].item<int>() == 1)
+	else if (action.item<int>() == 1)
 	{
-		ApplyThrottle(1);
-		ApplySteering(-1);
+		ApplyThrottle(0.8f);
+		ApplySteering(-0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Steer Left %d"), action[0].item<int>());
 	}
-	else if (action[0].item<int>() == 2)
+	else if (action.item<int>() == 2)
 	{
-		ApplyThrottle(1);
-		ApplySteering(1);
+		ApplyThrottle(0.8f);
+		ApplySteering(0.8f);
 		//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action[0].item<int>());
 	}
 
 	// for next state and reward
-	TraceDistance();
+	TraceDistance(false);
 }
 
 void AVehiclePawn::ApplyThrottle(float val)
@@ -194,22 +193,11 @@ void AVehiclePawn::ApplySteering(float val)
 	GetVehicleMovementComponent()->SetSteeringInput(val);
 }
 
-void AVehiclePawn::OnHandbrakePressed()
-{
-	GetVehicleMovementComponent()->SetHandbrakeInput(true);
-}
-
-void AVehiclePawn::OnHandbrakeReleased()
-{
-	GetVehicleMovementComponent()->SetHandbrakeInput(false);
-}
-
 void AVehiclePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		//hitWall = true;
-		done = true;
+		Done = true;
 		//if (GEngine)
 		//	GEngine->AddOnScreenDebugMessage(5, 0.0, FColor::Purple, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetName()));
 	}
@@ -218,9 +206,9 @@ void AVehiclePawn::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrim
 void AVehiclePawn::OnOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// for reward gate
-	if ((OtherActor != NULL) && (OtherActor != this) && (OtherComp != NULL))
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		hitGate = true;
+		HitGate = true;
 		//if (GEngine)
 		//	GEngine->AddOnScreenDebugMessage(8, 1.0, FColor::Orange, FString::Printf(TEXT("I Hit: %s"), *OtherActor->GetClass()->GetName()));
 	}
@@ -249,13 +237,10 @@ void AVehiclePawn::TraceByProfile(FHitResult& outHit, const FVector& start, cons
 	}*/
 }
 
-void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	PlayerInputComponent->BindAxis(NAME_ThrottleInput, this, &AVehiclePawn::ApplyThrottle);
-	PlayerInputComponent->BindAxis(NAME_SteerInput, this, &AVehiclePawn::ApplySteering);
-
-	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &AVehiclePawn::OnHandbrakePressed);
-	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &AVehiclePawn::OnHandbrakeReleased);
-}
+//void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	PlayerInputComponent->BindAxis(NAME_ThrottleInput, this, &AVehiclePawn::ApplyThrottle);
+//	PlayerInputComponent->BindAxis(NAME_SteerInput, this, &AVehiclePawn::ApplySteering);
+//}
