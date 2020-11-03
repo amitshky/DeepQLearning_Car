@@ -30,7 +30,7 @@ __pragma(warning(disable: 4018))\
 - [ ] Other Tracks
 
 ### DQN Implementation
-- [ ] Replay Memory
+- [x] Replay Memory
 - [x] Neural network and training interface class
-- [ ] Epsilon Greedy Strategy and Agent
-- [ ] Algorithm Implementation
+- [x] Epsilon Greedy Strategy and Agent
+- [x] Algorithm Implementation
