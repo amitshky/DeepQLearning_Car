@@ -137,19 +137,19 @@ void AVehiclePawn::TraceDistance(bool debugLine)
 	TraceByProfile(outHitLS1, SensorLS1->GetComponentLocation(), SensorLS1->GetForwardVector(), debugLine, FColor::Green);
 	TraceByProfile(outHitRS1, SensorRS1->GetComponentLocation(), SensorRS1->GetForwardVector(), debugLine, FColor::Green);
 
-	FString debugMsg = FString::Printf(TEXT(	// display sensor values on screen
-			"LS1 = %.3f    LS = %.3f    L = %.3f    F = %.3f    R = %.3f    RS = %.3f    RS1 = %.3f"
-		), 
-		outHitLS1.Time,
-		outHitLS.Time,
-		outHitL.Time,
-		outHitF.Time,
-		outHitR.Time,
-		outHitRS.Time,
-		outHitRS1.Time
-	);
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(1, 0.0, FColor::Magenta, debugMsg);
+	//FString debugMsg = FString::Printf(TEXT(	// display sensor values on screen
+	//		"LS1 = %.3f    LS = %.3f    L = %.3f    F = %.3f    R = %.3f    RS = %.3f    RS1 = %.3f"
+	//	), 
+	//	outHitLS1.Time,
+	//	outHitLS.Time,
+	//	outHitL.Time,
+	//	outHitF.Time,
+	//	outHitR.Time,
+	//	outHitRS.Time,
+	//	outHitRS1.Time
+	//);
+	//if (GEngine)
+	//	GEngine->AddOnScreenDebugMessage(1, 0.0, FColor::Magenta, debugMsg);
 
 	// Get current state
 	CurrentState = torch::tensor({
@@ -166,10 +166,13 @@ void AVehiclePawn::TraceDistance(bool debugLine)
 	if (Done)
 		CurrentReward = torch::tensor(-200.0f);
 
-	else if (  outHitF.Time   < 0.2f
-			|| outHitL.Time   < 0.2f || outHitR.Time   < 0.2f
-			|| outHitLS.Time  < 0.2f || outHitRS.Time  < 0.2f 
-			|| outHitLS1.Time < 0.2f || outHitRS1.Time < 0.2f)
+	else if (  outHitF.Time   < 0.1f
+			|| outHitL.Time   < 0.1f 
+			|| outHitR.Time   < 0.1f
+			|| outHitLS.Time  < 0.1f 
+			|| outHitRS.Time  < 0.1f 
+			|| outHitLS1.Time < 0.1f 
+			|| outHitRS1.Time < 0.1f)
 		CurrentReward = torch::tensor(-20.0f);
 
 	else
@@ -203,7 +206,7 @@ void AVehiclePawn::TakeAction(torch::Tensor& action)
 	}
 
 	// for next state and reward
-	TraceDistance(true);
+	TraceDistance();
 }
 
 void AVehiclePawn::ApplyThrottle(float val)

@@ -33,6 +33,9 @@ public:
 	void SaveOptimizer(const std::string& path);
 	void LoadOptimizer(const std::string& path);
 
+	void SaveRewardEval(std::vector<torch::Tensor>& vecRewards, const std::string& path);
+	void LoadRewardEval(std::vector<torch::Tensor>& vecRewards, const std::string& path);
+
 	inline Dqnet GetPolicyNet() const { return m_PolicyNet; }
 	inline Dqnet GetTargetNet() const { return m_TargetNet; }
 

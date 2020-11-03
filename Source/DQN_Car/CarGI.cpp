@@ -5,12 +5,12 @@
 #include "Misc/Paths.h"
 
 // global variables
-const float g_Start = 0.99f;
+const float g_Start = 0.6f;
 const float g_End   = 0.01f;
 const float g_Decay = 1e-4f;
 const float g_Gamma = 0.95f;
 const float g_LearningRate = 1e-3f;
-bool  g_Resume = false; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
+bool  g_Resume = true; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
 
 
 
@@ -21,7 +21,10 @@ const int32 UCarGI::NumActions = 3;
 int32 UCarGI::EpochCount = 0;
 int32 UCarGI::EpochCountEval = 0;
 int64 UCarGI::StepCount  = 0;
-int32 UCarGI::UpdateStep = 25 * 3600; // updates every `n` minutes @ 60fps
+int32 UCarGI::UpdateStep = 10 * 3600; // updates every `n` minutes @ 60fps
+
+torch::Tensor UCarGI::EpRewards = torch::zeros({ 1 });
+std::vector<torch::Tensor> UCarGI::VecRewards;
 
 const std::string UCarGI::RootPath = std::string(TCHAR_TO_UTF8(*FPaths::ProjectContentDir())) + "../SavedNets/";
 const std::string UCarGI::FilePath = UCarGI::RootPath + "Policy.pt";
@@ -45,6 +48,7 @@ UCarGI::UCarGI()
 	{
 		Net->LoadPolicyNet(FilePath);
 		Net->LoadTargetNet(FilePath);
+		Net->LoadRewardEval(VecRewards, RootPath + "VecRewards.pt");
 		Net->LoadOptimizer(RootPath + "Optimizer.pt");
 		Mem->LoadReplayMem(RootPath);
 		// load hyperparameters
@@ -57,15 +61,18 @@ UCarGI::UCarGI()
 		// LoadStateDict(m_TargetNet, m_PolicyNet); // doesnt work yet
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Replay Mem size = %lld"), Mem->GetMemorySize());
+	UE_LOG(LogTemp, Warning, TEXT("VecRewards size = %lld"), VecRewards.size());
 }
 
 UCarGI::~UCarGI()
 {
 	UE_LOG(LogTemp, Warning, TEXT("CarGI Destructor"));
 	UE_LOG(LogTemp, Warning, TEXT("Replay Mem size = %lld"), Mem->GetMemorySize());
+	UE_LOG(LogTemp, Warning, TEXT("VecRewards size = %lld"), VecRewards.size());
 
 	Net->SavePolicyNet(FilePath);
 	Net->SaveOptimizer(RootPath + "Optimizer.pt");
+	Net->SaveRewardEval(VecRewards, RootPath + "VecRewards.pt");
 	Mem->SaveReplayMem(Mem->GetMemorySize(), RootPath);
 	//serialize hyperparameters
 }

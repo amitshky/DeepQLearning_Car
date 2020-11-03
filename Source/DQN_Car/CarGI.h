@@ -32,6 +32,9 @@ public:
 	static int64 StepCount;      // timestep count
 	static int32 UpdateStep;     // timestep count to update targetNet
 
+	static torch::Tensor EpRewards; // store sum of rewards per n epochs
+	static std::vector<torch::Tensor> VecRewards; // store EpRewards
+
 	static const std::string RootPath; // path to SavedNets folder
 	static const std::string FilePath; // path to Policy.pt saved inside SavedNets folder
 

@@ -35,7 +35,7 @@ public:
 	UFUNCTION()
 		void OnOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	void TraceDistance(bool debugLine = true); // get state and reward
+	void TraceDistance(bool debugLine = false); // get state and reward
 	void TraceByProfile(FHitResult& outHit, const FVector& start, const FVector& forward, bool drawDebug = false, FColor debugColor = FColor::Green);
 
 	void TakeAction(torch::Tensor& action);

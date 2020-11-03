@@ -86,6 +86,16 @@ void NetworkInterface::LoadOptimizer(const std::string& path)
 	torch::load(m_Optimizer, path);
 }
 
+void NetworkInterface::SaveRewardEval(std::vector<torch::Tensor>& vecRewards, const std::string& path)
+{
+	torch::save(vecRewards, path);
+}
+
+void NetworkInterface::LoadRewardEval(std::vector<torch::Tensor>& vecRewards, const std::string& path)
+{
+	torch::load(vecRewards, path);
+}
+
 // this function doesnt work
 //void NetworkInterface::LoadStateDict()
 //{

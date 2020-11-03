@@ -1,1 +1,1 @@
-this folder stores Thirdparty libraries
+This folder stores Thirdparty libraries

@@ -23,6 +23,7 @@ ATrainingGM::ATrainingGM()
 void ATrainingGM::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void ATrainingGM::Tick(float deltaTime)
@@ -44,6 +45,8 @@ void ATrainingGM::Tick(float deltaTime)
 		bool done = MyVehicle->GetDone();
 		torch::Tensor doneTensor = torch::tensor(done ? 0 : 1, UCarGI::Device); // we need 0 when true so this is correct
 
+		UCarGI::EpRewards += reward;
+
 		Experience exp(state, action, nextState, reward, doneTensor);
 		UCarGI::Mem->Push(exp);
 		if (UCarGI::Mem->CanProvideSample(UCarGI::BatchSize))
@@ -62,6 +65,13 @@ void ATrainingGM::Tick(float deltaTime)
 
 		if (done)	// end of episode
 		{
+			constexpr int32_t updateFreq = 20;
+			if (UCarGI::EpochCount % updateFreq == 0.0f)
+			{
+				UCarGI::VecRewards.push_back(UCarGI::EpRewards / updateFreq);
+				UCarGI::EpRewards = torch::zeros({ 1 });
+			}
+
 			UCarGI::EpochCount++;
 			UGameplayStatics::OpenLevel(MyVehicle, *GetWorld()->GetName());
 		}
