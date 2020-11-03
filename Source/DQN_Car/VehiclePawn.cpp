@@ -64,25 +64,44 @@ AVehiclePawn::AVehiclePawn()
 
 	// Sensor empty mesh component
 	// maybe store them in an array later when refactoring
-	SensorForward = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorForward"));
-	SensorForward->SetupAttachment(RootComponent);
+	SensorF = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorF"));
+	SensorF->SetupAttachment(RootComponent);
+	SensorF->SetRelativeTransform(FTransform(FVector(250.0f, 0.0f, 70.0f)));
+	SensorF->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
 
-	SensorLeft = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorLeft"));
-	SensorLeft->SetupAttachment(RootComponent);
+	SensorL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorL"));
+	SensorL->SetupAttachment(RootComponent);
+	SensorL->SetRelativeTransform(FTransform(FVector(231.0f, -70.0f, 70.0f)));
+	SensorL->SetRelativeRotation(FRotator(0.0f, -30.0f, 0.0f));
 
-	SensorRight = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorRight"));
-	SensorRight->SetupAttachment(RootComponent);
+	SensorR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorR"));
+	SensorR->SetupAttachment(RootComponent);
+	SensorR->SetRelativeTransform(FTransform(FVector(231.0f, 70.0f, 70.0f)));
+	SensorR->SetRelativeRotation(FRotator(0.0f, 30.0f, 0.0f));
 
-	SensorLeftSide = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorLeftSide"));
-	SensorLeftSide->SetupAttachment(RootComponent);
+	SensorLS = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorLS"));
+	SensorLS->SetupAttachment(RootComponent);
+	SensorLS->SetRelativeTransform(FTransform(FVector(94.0f, -98.0f, 70.0f)));
+	SensorLS->SetRelativeRotation(FRotator(0.0f, -60.0f, 0.0f));
 
-	SensorRightSide = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorRightSide"));
-	SensorRightSide->SetupAttachment(RootComponent);
+	SensorRS = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorRS"));
+	SensorRS->SetupAttachment(RootComponent);
+	SensorRS->SetRelativeTransform(FTransform(FVector(94.0f, 98.0f, 70.0f)));
+	SensorRS->SetRelativeRotation(FRotator(0.0f, 60.0f, 0.0f));
+
+	SensorLS1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorLS1"));
+	SensorLS1->SetupAttachment(RootComponent);
+	SensorLS1->SetRelativeTransform(FTransform(FVector(-30.0f, -98.0f, 70.0f)));
+	SensorLS1->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+
+	SensorRS1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SensorRS1"));
+	SensorRS1->SetupAttachment(RootComponent);
+	SensorRS1->SetRelativeTransform(FTransform(FVector(-30.0f, 98.0f, 70.0f)));
+	SensorRS1->SetRelativeRotation(FRotator(0.0f, 90.0f, 0.0f));
 
 
 	CurrentState = torch::zeros({ UCarGI::NumStates }, Device);
 	CurrentReward = torch::zeros({ 1 }, Device);
-
 }
 
 AVehiclePawn::~AVehiclePawn()
@@ -109,48 +128,54 @@ void AVehiclePawn::Tick(float DeltaTime)
 
 void AVehiclePawn::TraceDistance(bool debugLine)
 {
-	FHitResult outHitForward, outHitLeft, outHitRight, outHitLeftSide, outHitRightSide;
-	TraceByProfile(outHitForward,   SensorForward->GetComponentLocation(),   SensorForward->GetForwardVector(),   debugLine, FColor::Green);
-	TraceByProfile(outHitLeft,      SensorLeft->GetComponentLocation(),      SensorLeft->GetForwardVector(),      debugLine, FColor::Red);
-	TraceByProfile(outHitRight,     SensorRight->GetComponentLocation(),     SensorRight->GetForwardVector(),     debugLine, FColor::Blue);
-	TraceByProfile(outHitLeftSide,  SensorLeftSide->GetComponentLocation(),  SensorLeftSide->GetForwardVector(),  debugLine, FColor::Magenta);
-	TraceByProfile(outHitRightSide, SensorRightSide->GetComponentLocation(), SensorRightSide->GetForwardVector(), debugLine, FColor::Cyan);
+	FHitResult outHitF, outHitL, outHitR, outHitLS, outHitRS, outHitLS1, outHitRS1;
+	TraceByProfile(outHitF,   SensorF->GetComponentLocation(),   SensorF->GetForwardVector(),   debugLine, FColor::Green);
+	TraceByProfile(outHitL,   SensorL->GetComponentLocation(),   SensorL->GetForwardVector(),   debugLine, FColor::Green);
+	TraceByProfile(outHitR,   SensorR->GetComponentLocation(),   SensorR->GetForwardVector(),   debugLine, FColor::Green);
+	TraceByProfile(outHitLS,  SensorLS->GetComponentLocation(),  SensorLS->GetForwardVector(),  debugLine, FColor::Green);
+	TraceByProfile(outHitRS,  SensorRS->GetComponentLocation(),  SensorRS->GetForwardVector(),  debugLine, FColor::Green);
+	TraceByProfile(outHitLS1, SensorLS1->GetComponentLocation(), SensorLS1->GetForwardVector(), debugLine, FColor::Green);
+	TraceByProfile(outHitRS1, SensorRS1->GetComponentLocation(), SensorRS1->GetForwardVector(), debugLine, FColor::Green);
 
 	FString debugMsg = FString::Printf(TEXT(	// display sensor values on screen
-		"LS = %.2f    L  = %.2f    F  = %.2f    R  = %.2f    RS = %.2f"
-	),
-		outHitLeftSide.Time,
-		outHitLeft.Time,
-		outHitForward.Time,
-		outHitRight.Time,
-		outHitRightSide.Time
+			"LS1 = %.3f    LS = %.3f    L = %.3f    F = %.3f    R = %.3f    RS = %.3f    RS1 = %.3f"
+		), 
+		outHitLS1.Time,
+		outHitLS.Time,
+		outHitL.Time,
+		outHitF.Time,
+		outHitR.Time,
+		outHitRS.Time,
+		outHitRS1.Time
 	);
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(1, 0.0, FColor::Magenta, debugMsg);
 
 	// Get current state
-	CurrentState = torch::tensor({ {	// 1x5 tensor
-		outHitLeftSide.Time,
-		outHitLeft.Time,
-		outHitForward.Time,
-		outHitRight.Time,
-		outHitRightSide.Time,
-	} }, Device);
+	CurrentState = torch::tensor({
+		outHitLS1.Time,
+		outHitLS.Time,
+		outHitL.Time,
+		outHitF.Time,
+		outHitR.Time,
+		outHitRS.Time,
+		outHitRS1.Time
+		}, Device);
 
 	// Get reward
 	if (Done)
-	{
 		CurrentReward = torch::tensor(-200.0f);
-	}
 
-	//else if (outHitLeftSide.Time < 0.2f || outHitLeft.Time < 0.2f || outHitForward.Time < 0.2f 
-	//		|| outHitRight.Time < 0.2f || outHitRightSide.Time < 0.2f)
-	//	CurrentReward = torch::tensor(-30.0f);
+	else if (  outHitF.Time   < 0.2f
+			|| outHitL.Time   < 0.2f || outHitR.Time   < 0.2f
+			|| outHitLS.Time  < 0.2f || outHitRS.Time  < 0.2f 
+			|| outHitLS1.Time < 0.2f || outHitRS1.Time < 0.2f)
+		CurrentReward = torch::tensor(-20.0f);
 
 	else
 		CurrentReward = torch::tensor(0.0f);
 
-	if (HitGate)
+	if (!Done && HitGate)
 	{
 		CurrentReward += torch::tensor(50.0f);
 		HitGate = false;
@@ -162,23 +187,23 @@ void AVehiclePawn::TakeAction(torch::Tensor& action)
 	if (action.item<int>() == 0)
 	{
 		ApplyThrottle(0.8f);
-		//UE_LOG(LogTemp, Warning, TEXT("Throttle %d"), action[0].item<int>());
+		//UE_LOG(LogTemp, Warning, TEXT("Throttle %d"), action.item<int>());
 	}
 	else if (action.item<int>() == 1)
 	{
 		ApplyThrottle(0.8f);
 		ApplySteering(-0.8f);
-		//UE_LOG(LogTemp, Warning, TEXT("Steer Left %d"), action[0].item<int>());
+		//UE_LOG(LogTemp, Warning, TEXT("Steer Left %d"), action.item<int>());
 	}
 	else if (action.item<int>() == 2)
 	{
 		ApplyThrottle(0.8f);
 		ApplySteering(0.8f);
-		//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action[0].item<int>());
+		//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action.item<int>());
 	}
 
 	// for next state and reward
-	TraceDistance(false);
+	TraceDistance(true);
 }
 
 void AVehiclePawn::ApplyThrottle(float val)

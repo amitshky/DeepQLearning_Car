@@ -34,9 +34,33 @@ void ATrainingGM::Tick(float deltaTime)
 	AVehiclePawn* MyVehicle = Cast<AVehiclePawn>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if (MyVehicle)
 	{
+		torch::Tensor state = MyVehicle->GetState();
+		torch::Tensor action = UCarGI::Agent->SelectAction(state, UCarGI::Net->GetPolicyNet());
+
+		MyVehicle->TakeAction(action);
+		torch::Tensor nextState = MyVehicle->GetState();
+		torch::Tensor reward = MyVehicle->GetReward();
+
 		bool done = MyVehicle->GetDone();
-		MyVehicle->TraceDistance(true);
-		if (done)
+		torch::Tensor doneTensor = torch::tensor(done ? 0 : 1, UCarGI::Device); // we need 0 when true so this is correct
+
+		Experience exp(state, action, nextState, reward, doneTensor);
+		UCarGI::Mem->Push(exp);
+		if (UCarGI::Mem->CanProvideSample(UCarGI::BatchSize))
+		{
+			exp = UCarGI::Mem->Sample(UCarGI::BatchSize);
+			UCarGI::Net->Train(exp);
+		}
+
+		if (UCarGI::StepCount++ == UCarGI::UpdateStep)
+		{
+			// update targetNet
+			UCarGI::StepCount = 0;
+			UCarGI::Net->CloneModel(UCarGI::FilePath);
+			UE_LOG(LogTemp, Warning, TEXT("Model Updated    epoch = %d"), UCarGI::EpochCount + 1);
+		}
+
+		if (done)	// end of episode
 		{
 			UCarGI::EpochCount++;
 			UGameplayStatics::OpenLevel(MyVehicle, *GetWorld()->GetName());

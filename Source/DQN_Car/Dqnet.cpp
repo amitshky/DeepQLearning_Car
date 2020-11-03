@@ -3,13 +3,13 @@
 
 #include "Dqnet.h"
 
-const int32_t g_HiddenLayer1 = 32;
-const int32_t g_HiddenLayer2 = 16;
+const int32_t g_HiddenLayer1 = 16;
+const int32_t g_HiddenLayer2 = 8;
 
 DqnetImpl::DqnetImpl(int32_t numStates, int32_t numActions)
-	:m_Linear1(torch::nn::LinearOptions(numStates, g_HiddenLayer1).bias(false)),
-	m_Linear2(torch::nn::LinearOptions(g_HiddenLayer1, g_HiddenLayer2).bias(false)),
-	m_Out(torch::nn::LinearOptions(g_HiddenLayer2, numActions).bias(false))
+	:m_Linear1(torch::nn::LinearOptions(numStates, g_HiddenLayer1)),
+	m_Linear2(torch::nn::LinearOptions(g_HiddenLayer1, g_HiddenLayer2)),
+	m_Out(torch::nn::LinearOptions(g_HiddenLayer2, numActions))
 {
 	register_module("m_Linear1", m_Linear1);
 	register_module("m_Linear2", m_Linear2);

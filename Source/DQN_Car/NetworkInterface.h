@@ -6,7 +6,7 @@
 THIRD_PARTY_INCLUDES_START
 #include "torch/torch.h"
 THIRD_PARTY_INCLUDES_END
-//#include "ReplayMemory.h"
+#include "ReplayMemory.h"
 #include "Dqnet.h"
 
 /**
@@ -20,7 +20,7 @@ public:
 
 	void Init();
 
-	//void Train(const Experience& sample);
+	void Train(const Experience& sample);
 
 	void CloneModel(const std::string& path);
 

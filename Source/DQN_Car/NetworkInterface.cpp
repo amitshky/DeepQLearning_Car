@@ -28,27 +28,27 @@ void NetworkInterface::Init()
 	UE_LOG(LogTemp, Warning, TEXT("NetworkInterface init"));
 }
 
-//void NetworkInterface::Train(const Experience& sample)
-//{
-//	// we take the predicted Q-value of the action we performed (hence .gather())
-//	torch::Tensor qValue = m_PolicyNet->forward(sample.State).gather(1, sample.Action).to(m_Device);	// predicted Q-value
-//
-//	torch::autograd::GradMode::set_enabled(false); // so that targetQ does not gather gradients (grad is not needed for loss function's target tensor)
-//	torch::Tensor qmax = m_TargetNet->forward(sample.NextState).max_values(1, true).to(m_Device);
-//	torch::Tensor targetQ = sample.Done * qmax * m_Gamma + sample.Reward;	// target Q-value 
-//	// if next state terminates then targetQ = Reward (that is the use of Done)
-//	torch::autograd::GradMode::set_enabled(true);
-//
-//	//UE_LOG(LogTemp, Warning, TEXT("qValue: %.4f    targetQ: %.4f"), qValue[0].item<float>(), targetQ[0].item<float>());
-//
-//	m_Loss = torch::smooth_l1_loss(qValue, targetQ);
-//	m_PolicyNet->zero_grad();
-//	m_Loss.backward();
-//	m_Optimizer.step();
-//
-//	// if (GEngine)
-//	// 	GEngine->AddOnScreenDebugMessage(9, 0.0f, FColor::Black, FString::Printf(TEXT("Loss: %.4f"), loss.item<float>()));
-//}
+void NetworkInterface::Train(const Experience& sample)
+{
+	// we take the predicted Q-value of the action we performed (hence .gather())
+	torch::Tensor qValue = m_PolicyNet->forward(sample.State).gather(1, sample.Action).to(m_Device);	// predicted Q-value
+
+	torch::autograd::GradMode::set_enabled(false); // so that targetQ does not gather gradients (grad is not needed for loss function's target tensor)
+	torch::Tensor qmax = m_TargetNet->forward(sample.NextState).max_values(1, true).to(m_Device);
+	torch::Tensor targetQ = sample.Done * qmax * m_Gamma + sample.Reward;	// target Q-value 
+	// if next state terminates then targetQ = Reward (that is the use of Done)
+	torch::autograd::GradMode::set_enabled(true);
+
+	//UE_LOG(LogTemp, Warning, TEXT("qValue: %.4f    targetQ: %.4f"), qValue[0].item<float>(), targetQ[0].item<float>());
+
+	m_Loss = torch::mse_loss(qValue, targetQ);
+	m_PolicyNet->zero_grad();
+	m_Loss.backward();
+	m_Optimizer.step();
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(9, 0.0f, FColor::Black, FString::Printf(TEXT("Loss: %.4f"), m_Loss.item<float>()));
+}
 
 void NetworkInterface::CloneModel(const std::string& path)
 {

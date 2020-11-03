@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-//#include "ReplayMemory.h"
-//#include "QAgent.h"
+#include "ReplayMemory.h"
+#include "QAgent.h"
 #include "NetworkInterface.h"
 #include <string>
 #include <memory>
@@ -27,15 +27,17 @@ public:
 	static const int32 NumStates;  // number of states
 	static const int32 NumActions; // number of actions
 
-	static int32 EpochCount; // epoch/episode count
-	static int64 StepCount;  // timestep count
+	static int32 EpochCount;     // epoch/episode count for trainingGM
+	static int32 EpochCountEval; // epoch/episode count for evaluationGM
+	static int64 StepCount;      // timestep count
+	static int32 UpdateStep;     // timestep count to update targetNet
 
 	static const std::string RootPath; // path to SavedNets folder
 	static const std::string FilePath; // path to Policy.pt saved inside SavedNets folder
 
 	static torch::Device Device; // device // cuda or cpu
 
-	//static std::unique_ptr<ReplayMemory> Mem;
-	//static std::unique_ptr<QAgent> Agent;
-	//static std::unique_ptr<NetworkInterface> Net;
+	static std::unique_ptr<ReplayMemory> Mem;
+	static std::unique_ptr<QAgent> Agent;
+	static std::unique_ptr<NetworkInterface> Net;
 };

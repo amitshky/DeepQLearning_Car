@@ -7,6 +7,7 @@
 THIRD_PARTY_INCLUDES_START
 #include "torch/torch.h"
 THIRD_PARTY_INCLUDES_END
+#include "CarGI.h"
 #include "VehiclePawn.generated.h"
 
 /**
@@ -53,24 +54,30 @@ protected:
 
 	// sensors
 	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		class UStaticMeshComponent* SensorForward;
+		class UStaticMeshComponent* SensorF;
 
 	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* SensorLeft;
+		UStaticMeshComponent* SensorL;
 
 	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* SensorRight;
+		UStaticMeshComponent* SensorR;
 
 	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* SensorLeftSide;
+		UStaticMeshComponent* SensorLS;
 
 	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* SensorRightSide;
+		UStaticMeshComponent* SensorRS;
+
+	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* SensorLS1;
+
+	UPROPERTY(Category = Sensor, EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* SensorRS1;
 
 private:
 	torch::Tensor CurrentState;
 	torch::Tensor CurrentReward;
 	bool Done = false;
 	bool HitGate = false;
-	torch::Device Device = torch::kCPU;
+	torch::Device Device = UCarGI::Device;
 };
