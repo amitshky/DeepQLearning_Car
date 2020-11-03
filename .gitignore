@@ -78,5 +78,6 @@ pytorch saved files
 *.pt
 
 Thirdparty/
+!Thirdparty/Readme.md
 .idea/
 Source/DQN_Car/DQN_Car.Build.cs
