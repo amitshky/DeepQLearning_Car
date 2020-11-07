@@ -29,7 +29,7 @@ torch::Tensor QAgent::SelectAction(torch::Tensor& state, Dqnet policyNet)
 		//UE_LOG(LogTemp, Warning, TEXT("random action"));
 		return torch::randint(0, m_NumActions, { 1 }, m_Device);
 	}
-	//UE_LOG(LogTemp, Warning, TEXT("policy action"));
+	UE_LOG(LogTemp, Warning, TEXT("policy action"));
 	torch::NoGradGuard noGrad;
 	return policyNet->forward(state.reshape({ 1, -1 })).argmax(1).to(m_Device);
 }
