@@ -5,7 +5,7 @@
 #include "Misc/Paths.h"
 
 // global variables
-const float g_Start = 0.01f;
+const float g_Start = 0.99f;
 const float g_End   = 0.01f;
 const float g_Decay = 1e-4f;
 const float g_Gamma = 0.95f; 
@@ -14,7 +14,7 @@ bool  g_Resume = true; // to resume training // also make sure the previous mode
 
 
 
-const uint64 UCarGI::Capacity  = 256 * 1024;
+const uint64 UCarGI::Capacity  = 64 * 1024;
 const int32 UCarGI::BatchSize  = 128;
 const int32 UCarGI::NumStates  = 7;
 const int32 UCarGI::NumActions = 3;
