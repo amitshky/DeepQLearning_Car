@@ -25,11 +25,8 @@ torch::Tensor QAgent::SelectAction(torch::Tensor& state, Dqnet policyNet)
 		GEngine->AddOnScreenDebugMessage(12, 0.0, FColor::Black, FString::Printf(TEXT("exploration rate = %.4f"), rate));
 
 	if (rate > m_RandomNum(m_Generator))
-	{
-		//UE_LOG(LogTemp, Warning, TEXT("random action"));
 		return torch::randint(0, m_NumActions, { 1 }, m_Device);
-	}
-	//UE_LOG(LogTemp, Warning, TEXT("policy action"));
+	
 	torch::NoGradGuard noGrad;
 	return policyNet->forward(state.reshape({ 1, -1 })).argmax(1).to(m_Device);
 }
