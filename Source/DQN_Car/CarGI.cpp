@@ -9,8 +9,8 @@ const float g_Start = 0.99f;
 const float g_End   = 0.01f;
 const float g_Decay = 1e-4f;
 const float g_Gamma = 0.95f;
-const float g_LearningRate = 1e-2f;
-bool  g_Resume = false; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
+const float g_LearningRate = 1e-3f;
+bool  g_Resume = true; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
 
 const uint64 UCarGI::Capacity  = 128 * 1024;
 const int32 UCarGI::BatchSize  = 128;
