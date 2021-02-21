@@ -5,17 +5,17 @@
 #include "Misc/Paths.h"
 
 // global variables
-const float g_Start = 0.99f;
-const float g_End   = 0.01f;
+const float g_Start = 0.50f;
+const float g_End   = 0.05f;
 const float g_Decay = 1e-4f;
 const float g_Gamma = 0.95f;
 const float g_LearningRate = 1e-3f;
 bool  g_Resume = true; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
 
-const uint64 UCarGI::Capacity  = 128 * 1024;
-const int32 UCarGI::BatchSize  = 128;
-const int32 UCarGI::NumStates  = 7;
-const int32 UCarGI::NumActions = 3;
+const uint64 UCarGI::Capacity   = 1024 * 1024;
+const int32  UCarGI::BatchSize  = 128;
+const int32  UCarGI::NumStates  = 7;
+const int32  UCarGI::NumActions = 3;
 int32 UCarGI::EpochCount = 0;
 int32 UCarGI::EpochCountEval = 0;
 int64 UCarGI::StepCount  = 0;

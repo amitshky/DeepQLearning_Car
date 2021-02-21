@@ -47,7 +47,7 @@ private:
 	Dqnet m_PolicyNet;
 	Dqnet m_TargetNet;
 
-	torch::optim::Adam m_Optimizer;
+	torch::optim::RMSprop m_Optimizer;
 
 	float m_Gamma = 0.99f;
 

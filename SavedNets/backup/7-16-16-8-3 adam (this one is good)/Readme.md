@@ -14,3 +14,5 @@ UpdateStep = 10 * 3600;
 Hidden Layer 1 = 16\
 Hidden Layer 2 = 16\
 Hidden Layer 3 = 8
+
+optimizer = adam

@@ -7,7 +7,7 @@
 NetworkInterface::NetworkInterface(int32 numStates, int32 numActions, float gamma, float learningRate, torch::Device device)
 	:m_PolicyNet(numStates, numActions),
 	 m_TargetNet(numStates, numActions),
-	 m_Optimizer(m_PolicyNet->parameters(), torch::optim::AdamOptions(learningRate)),
+	 m_Optimizer(m_PolicyNet->parameters(), torch::optim::RMSpropOptions(learningRate)),
 	 m_Gamma(gamma),
 	 m_Device(device)
 {

@@ -10,7 +10,8 @@ THIRD_PARTY_INCLUDES_END
 struct Experience
 {
 	Experience() {}
-	Experience(const torch::Tensor& state, const torch::Tensor& action, const torch::Tensor& nextState, const torch::Tensor& reward, const torch::Tensor& done)
+	Experience(const torch::Tensor& state, const torch::Tensor& action, const torch::Tensor& nextState, 
+		const torch::Tensor& reward, const torch::Tensor& done)
 	{
 		State     = state;
 		Action    = action;
@@ -53,5 +54,7 @@ private:
 	std::vector<Experience> m_Memory;
 	std::mt19937 m_Generator;
 	std::vector<int64> m_RandomNumList;
+
+	uint64_t m_SampleCount = 0;
 };
 
