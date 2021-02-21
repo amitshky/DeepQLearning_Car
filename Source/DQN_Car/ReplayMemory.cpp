@@ -36,17 +36,21 @@ Experience ReplayMemory::Sample(int32_t batchSize)
 	torch::Tensor rewards    = torch::zeros({ batchSize, 1 }, m_Device);
 	torch::Tensor done       = torch::zeros({ batchSize, 1 }, torch::kInt8).to(m_Device);
 
-	std::shuffle(m_RandomNumList.begin(), m_RandomNumList.end(), m_Generator); // to generate random number without repeat
+	if (m_SampleCount % m_RandomNumList.size() == 0 || m_RandomNumList.size() < m_Capacity)
+	{
+		std::shuffle(m_RandomNumList.begin(), m_RandomNumList.end(), m_Generator); // to generate random number without repeat
+		m_SampleCount = 0;
+	}
 
 	//UE_LOG(LogTemp, Warning, TEXT("Sampled"));
 	for (int i = 0; i < batchSize; i++)
 	{
-		int64_t index = m_RandomNumList[i];
+		int64_t index = m_RandomNumList[m_SampleCount++ % m_RandomNumList.size()];
 
 		states[i]     = m_Memory[index].State;
 		actions[i]    = m_Memory[index].Action;
 		nextStates[i] = m_Memory[index].NextState;
-		rewards[i]    = m_Memory[index].Reward; // not indexed by 0 because it is set only using torch::tensor without specifying dimension
+		rewards[i]    = m_Memory[index].Reward;
 		done[i]       = m_Memory[index].Done;
 	}
 

@@ -6,10 +6,10 @@
 
 NetworkInterface::NetworkInterface(int32 numStates, int32 numActions, float gamma, float learningRate, torch::Device device)
 	:m_PolicyNet(numStates, numActions),
-	m_TargetNet(numStates, numActions),
-	m_Optimizer(m_PolicyNet->parameters(), torch::optim::RMSpropOptions(learningRate)),
-	m_Gamma(gamma),
-	m_Device(device)
+	 m_TargetNet(numStates, numActions),
+	 m_Optimizer(m_PolicyNet->parameters(), torch::optim::RMSpropOptions(learningRate)),
+	 m_Gamma(gamma),
+	 m_Device(device)
 {
 
 }
@@ -19,7 +19,6 @@ NetworkInterface::~NetworkInterface()
 }
 
 // because model could not be initialized in gpu from the global scope or something
-// so this function initializes model in gpu
 void NetworkInterface::Init()
 {
 	m_PolicyNet->to(m_Device);
