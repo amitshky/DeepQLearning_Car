@@ -160,7 +160,7 @@ void AVehiclePawn::TraceDistance(bool debugLine)
 		outHitR.Time,
 		outHitRS.Time,
 		outHitRS1.Time
-		}, Device);
+	}, Device);
 
 	// Get reward
 	if (Done)

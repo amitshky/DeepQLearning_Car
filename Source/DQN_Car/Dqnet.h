@@ -21,6 +21,7 @@ public:
 private:
 	torch::nn::Linear m_Linear1;
 	torch::nn::Linear m_Linear2;
+	torch::nn::Linear m_Linear3;
 	torch::nn::Linear m_Out;
 };
 TORCH_MODULE(Dqnet);
