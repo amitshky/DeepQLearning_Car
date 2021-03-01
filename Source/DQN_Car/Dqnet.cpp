@@ -3,7 +3,7 @@
 
 #include "Dqnet.h"
 
-constexpr int32_t g_HiddenLayer1 = 16;
+constexpr int32_t g_HiddenLayer1 = 32;
 constexpr int32_t g_HiddenLayer2 = 16;
 constexpr int32_t g_HiddenLayer3 = 8;
 

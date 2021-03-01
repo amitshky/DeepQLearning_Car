@@ -36,7 +36,7 @@ Experience ReplayMemory::Sample(int32_t batchSize)
 	torch::Tensor rewards    = torch::zeros({ batchSize, 1 }, m_Device);
 	torch::Tensor done       = torch::zeros({ batchSize, 1 }, torch::kInt8).to(m_Device);
 
-	if (m_SampleCount % m_RandomNumList.size() == 0 || m_RandomNumList.size() < m_Capacity)
+	if (m_SampleCount % m_RandomNumList.size() == 0 || m_RandomNumList.size() < 742476)
 	{
 		std::shuffle(m_RandomNumList.begin(), m_RandomNumList.end(), m_Generator); // to generate random number without repeat
 		m_SampleCount = 0;

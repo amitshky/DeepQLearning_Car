@@ -13,7 +13,7 @@ const float g_LearningRate = 1e-3f;
 bool  g_Resume = true; // to resume training // also make sure the previous model has the same architecture before setting it to "true"
 
 const uint64 UCarGI::Capacity   = 1024 * 1024;
-const int32  UCarGI::BatchSize  = 128;
+const int32  UCarGI::BatchSize  = 512;
 const int32  UCarGI::NumStates  = 7;
 const int32  UCarGI::NumActions = 3;
 int32 UCarGI::EpochCount = 0;
