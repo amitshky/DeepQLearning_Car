@@ -6,7 +6,7 @@
 
 // global variables
 const float g_Start = 0.01f;
-const float g_End = 0.01f;
+const float g_End   = 0.01f;
 const float g_Decay = 1e-4f;
 const float g_Gamma = 0.95f;
 const float g_LearningRate = 1e-3f;
