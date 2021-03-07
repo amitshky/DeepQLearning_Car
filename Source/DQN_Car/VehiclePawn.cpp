@@ -196,17 +196,27 @@ void AVehiclePawn::TakeAction(torch::Tensor& action)
 	{
 		ApplyThrottle(0.8f);
 		ApplySteering(-0.8f);
-		//UE_LOG(LogTemp, Warning, TEXT("Steer Left %d"), action.item<int>());
+		//UE_LOG(LogTemp, Warning, TEXT("Steer Left with throttle %d"), action.item<int>());
 	}
 	else if (action.item<int>() == 2)
 	{
 		ApplyThrottle(0.8f);
 		ApplySteering(0.8f);
-		//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action.item<int>());
+		//UE_LOG(LogTemp, Warning, TEXT("Steer Right with throttle %d"), action.item<int>());
 	}
+	//else if (action.item<int>() == 3)
+	//{
+	//	ApplySteering(-0.8f);
+	//	//UE_LOG(LogTemp, Warning, TEXT("Steer left %d"), action.item<int>());
+	//}
+	//else if (action.item<int>() == 4)
+	//{
+	//	ApplySteering(0.8f);
+	//	//UE_LOG(LogTemp, Warning, TEXT("Steer Right %d"), action.item<int>());
+	//}
 
 	// for next state and reward
-	TraceDistance();
+	TraceDistance(true);
 }
 
 void AVehiclePawn::ApplyThrottle(float val)
@@ -256,13 +266,13 @@ void AVehiclePawn::TraceByProfile(FHitResult& outHit, const FVector& start, cons
 	//return isHit;
 
 	// example: 
-	/*if (isHit_F)
-	{
-		if (outHitForward.bBlockingHit)
-		{
+	//if (isHit_F)
+	//{
+	//	if (outHitForward.bBlockingHit)
+	//	{
 
-		}
-	}*/
+	//	}
+	//}
 }
 
 //void AVehiclePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
