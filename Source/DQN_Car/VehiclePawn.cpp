@@ -216,7 +216,7 @@ void AVehiclePawn::TakeAction(torch::Tensor& action)
 	//}
 
 	// for next state and reward
-	TraceDistance();
+	TraceDistance(true);
 }
 
 void AVehiclePawn::ApplyThrottle(float val)
