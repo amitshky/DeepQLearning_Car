@@ -25,9 +25,6 @@ __pragma(warning(disable: 4018))\
 ### Unreal Environment Simulation
 - [x] Car Movement
 - [x] Track (Default; Training)
-- [ ] Minimap
-- [ ] Graphs
-- [ ] Other Tracks
 
 ### DQN Implementation
 - [x] Replay Memory
