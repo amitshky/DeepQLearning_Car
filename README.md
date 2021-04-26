@@ -57,9 +57,11 @@ A complete list of parameters and hyperparameters used in this project is given 
 
 # Output
 Screenshots of the project.\
-![Car and position of the sensors (green lines)](Images/CarSensors.png)
+Car and position of the sensors (green lines)\
+![](Images/CarSensors.png | width=100)
 
-![Track (the white dots represent position of the reward gates)](Images/track.png)
+Track (the white dots represent position of the reward gates)\
+![](Images/track.jpg | width=100)
 
 # ToDo
 ## Unreal Environment Simulation
