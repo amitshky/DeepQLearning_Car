@@ -37,21 +37,21 @@ Training DQN agents require a reward function. We used the following reward func
 * For the agent to receive a positive reward, we have added reward gates at various positions of the track. The agent receives an additional reward of +50 every time it passes one of these reward gates.
 
 A complete list of parameters and hyperparameters used in this project is given below,
-| Parameters and Hyperparameters | Value             |
-|--------------------------------|-------------------|
-| State-space size               | $7$               |
-| Action-space size              | $3$               |
-| Hidden layer 1 size            | $16$              |
-| Hidden layer 2 size            | $16$              |
-| Hidden layer 3 size            | $8$               |
-| Discount factor ($\gamma$)     | $0.95$            |
-| Learning rate                  | $1\times 10^{-3}$ |
-| Batch size                     | $128$             |
-| Capacity ($N$)                 | $131072$          |
-| Update Step size ($C$)         | $36000$           |
-| $\epsilon_{max}$               | $0.99$            |
-| $\epsilon_{min}$               | $0.01$            |
-| Decay rate ($\eta$)            | $1\times 10^{-4}$ |
+| Parameters and Hyperparameters | Value  |
+|--------------------------------|--------|
+| State-space size               | 7      |
+| Action-space size              | 3      |
+| Hidden layer 1 size            | 16     |
+| Hidden layer 2 size            | 16     |
+| Hidden layer 3 size            | 8      |
+| Discount factor                | 0.95   |
+| Learning rate                  | 1e-3   |
+| Batch size                     | 128    |
+| Capacity                       | 131072 |
+| Update Step size               | 36000  |
+| epsilon max                    | 0.99   |
+| epsilon min                    | 0.01   |
+| Decay rate                     | 1e-4   |
 
 * The input layer and the hidden layers use ReLU activation function and the output layer is a Linear function. We used Mean Squared Error (MSE) loss function and Adam optimizer to update the weights using backpropagation. 
 
