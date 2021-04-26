@@ -76,9 +76,8 @@ DerivedDataCache/*
 
 pytorch saved files
 *.pt
+!SavedNets/doNotDelete/*/*.pt
 
-
+Thirdparty/
+!Thirdparty/Readme.md
 Source/DQN_Car/DQN_Car.Build.cs
-
-# Rider for unreal files
-.idea/
