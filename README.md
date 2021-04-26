@@ -4,6 +4,7 @@ This is a simulation of a self-driving car that can navigate through a predefine
 This project was built with [CUDA v10.1](https://developer.nvidia.com/cuda-10.1-download-archive-base), [libtorch 1.4.0](https://download.pytorch.org/libtorch/cu101/libtorch-shared-with-deps-1.4.0.zip), and Unreal Engine 4.23.1. You can watch the demo of the project running [here](https://youtu.be/OmNfeJuL4x0).
 
 # Getting Started
+For Windows
 ## Prerequisites
 * Visual studio 2019
 * Unreal Engine 4.23.1
