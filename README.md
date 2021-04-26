@@ -28,6 +28,8 @@ __pragma(warning(disable: 4018))\
 * Open ```DQN_Car.sln``` file and check to see if the startup project is "DQN_Car" and not "UE4" 
 * Build and run (press F5 for Visual Studio)
 * If you want to resume the training then set ```g_Resume = true``` in ```Source/DQN_Car/CarGI.cpp```, then build and run
+  * ```SavedNets/``` folder contains saved files of the models
+  * copy .pt files from ```SavedNets/backup/new (show)/``` to ```SavedNets/``` before setting running
 
 # Project Details
 We created the track and the car in Unreal Engine. The car contains 7 sensors and can perform one of 3 actions at a given timestep i.e., move forward, turn left, and turn right. 
